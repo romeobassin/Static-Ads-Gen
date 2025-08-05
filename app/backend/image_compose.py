@@ -1,103 +1,148 @@
-from PIL import Image, ImageDraw, ImageFont
-import json
-import base64
-from io import BytesIO
-from text_gen import read_img, encode_pil_image_to_base64
+import replicate
 import os
+from dotenv import load_dotenv
+from PIL import Image
+import requests
+import io
+from openai import OpenAI
+from load_template import load_template
+import base64
 
+load_dotenv()
 
-def compose_image(image_input, template):
+# Set the API token - this is the easiest way to authorize
+os.environ["REPLICATE_API_TOKEN"] = os.getenv("REPLICATE_API_TOKEN")
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+
+# Check if API token is set
+if not os.getenv("REPLICATE_API_TOKEN"):
+    raise ValueError("REPLICATE_API_TOKEN environment variable is not set")
+
+if not os.getenv("OPENAI_API_KEY"):
+    raise ValueError("OPENAI_API_KEY environment variable is not set")
+
+def generate_image_description(image_input, template="simple_ad"):
     """
-    Compose image with text overlay
-    image_input can be either base64 string or file path
+    Generate a description for an image using OpenAI Vision API
+    Supports base64, local file path, or URL
+    Returns formatted text based on template structure
     """
-    try:
-        # Get AI description
-        json_str = read_img(image_input, template)
-        print(f"AI Response type: {type(json_str)}")
-        print(f"AI Response: {json_str}")
-        
-        # Try to parse as JSON
-        try:
-            description = json.loads(json_str)
-            print("Successfully parsed JSON")
-        except json.JSONDecodeError as e:
-            print(f"JSON parsing failed: {e}")
-            print("Using raw string as description")
-            # If JSON parsing fails, use the raw string
-            description = {"headline": {"text": json_str, "position": {"x": 10, "y": 10}, "color": "#FFFFFF", "font_size": 24}}
-        
-        # Load the image
-        if os.path.exists(image_input):
-            # It's a file path
-            image = Image.open(image_input)
-        else:
-            # It's a base64 string - we need to decode it first
-            image_data = base64.b64decode(image_input)
-            image = Image.open(BytesIO(image_data))
-        
-        # Create a copy for drawing
-        img_with_text = image.copy()
-        draw = ImageDraw.Draw(img_with_text)
-        
-        # Process each text element in the description
-        for key, val in description.items():
-            if key == "id":
-                continue  # Skip the template ID
-            
-            # Check if this is a text element with required properties
-            if not isinstance(val, dict) or "text" not in val or "position" not in val:
-                continue
-            
-            # Get text properties
-            text = val.get("text", "")
-            position = val.get("position", {})
-            color = val.get("color", "#FFFFFF")
-            font_size = val.get("font_size", 20)
-            
-            # Skip if no text or invalid position
-            if not text or not position or "x" not in position or "y" not in position:
-                continue
-            
-            # Load font
-            try:
-                font = ImageFont.truetype("arial.ttf", font_size)
-            except (ValueError, OSError):
-                try:
-                    # Try alternative fonts
-                    font = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", font_size)
-                except (ValueError, OSError):
-                    print(f"Could not load font for size {font_size}, using default")
-                    font = ImageFont.load_default()
-            
-            # Draw text
-            pos = (position["x"], position["y"])
-            draw.text(pos, text, font=font, fill=color)
-            print(f"Added text '{text}' at position {pos} with color {color} and size {font_size}")
-        
-        # Save the composed image
-        img_with_text.save("composed_image.png")
-        print("Composed image saved as 'composed_image.png'")
-        
-        return img_with_text
-        
-    except Exception as e:
-        print(f"Error composing image: {e}")
-        import traceback
-        traceback.print_exc()
-        return None
+    client = OpenAI()
 
-
-# Test the function
-if __name__ == "__main__":
-    # Use raw string to avoid escape sequence issues
-    image_path = r".\imgs\S6d19f0facf734d3aaf771b4734d36611c.webp"
+    template_data = load_template(template)
     
-    result = compose_image(image_path, "discount_ad")
-    if result:
-        print("Image composition completed successfully!")
+    # Determine the type of image input and convert to base64
+    if isinstance(image_input, str):
+        if image_input.startswith('http'):
+            # URL - download and convert to base64
+            response = requests.get(image_input)
+            image_base64 = base64.b64encode(response.content).decode('utf-8')
+        elif os.path.exists(image_input):
+            # Local file path
+            with open(image_input, 'rb') as image_file:
+                image_base64 = base64.b64encode(image_file.read()).decode('utf-8')
+        else:
+            # Assume it's already base64
+            image_base64 = image_input
+    elif isinstance(image_input, bytes):
+        # Raw bytes - convert to base64
+        image_base64 = base64.b64encode(image_input).decode('utf-8')
     else:
-        print("Image composition failed!")
+        raise ValueError("Unsupported image input type")
+    
+    # Get template structure
+    template_name = template_data["name"]
+    template_properties = template_data["parameters"]["properties"]
+    required_fields = template_data["parameters"]["required"]
+    
+    # Create template-specific prompt based on the template structure
+    if template == "simple_ad":
+        system_prompt = "Analyze this image and generate a prompt instruction for adding text overlay. Return ONLY a prompt like: 'DONT CHANGE THE IMAGE, ONLY OVERLAY THIS IMAGE with HEADER which says: \"[headline]\", THEN SUBHEADLINE which says: \"[subheadline]\", and lastly CTA that says: \"[cta]\"'"
+    elif template == "discount_ad":
+        system_prompt = "Analyze this image and generate a prompt instruction for adding text overlay. Return ONLY a prompt like: 'DONT CHANGE THE IMAGE, ONLY OVERLAY THIS IMAGE with HEADER which says: \"[headline]\", THEN DISCOUNT which says: \"[discount]\", THEN VALIDITY which says: \"[valid_until]\", and lastly CTA that says: \"[cta]\"'"
+    elif template == "feature_highlight":
+        system_prompt = "Analyze this image and generate a prompt instruction for adding text overlay. Return ONLY a prompt like: 'DONT CHANGE THE IMAGE, ONLY OVERLAY THIS IMAGE with HEADER which says: \"[headline]\", THEN TWO BULLET POINTS which say: \"[feature1]\", \"[feature2]\", and lastly CTA that says: \"[cta]\"'"
+    else:
+        system_prompt = f"Analyze this image and generate a prompt instruction for adding text overlay that follows this template structure: {required_fields}"
+    
+    # Single API call to analyze image and generate ad text
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": system_prompt
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "Generate a prompt instruction for adding text overlay to this image. The prompt should tell an AI image model exactly what text to add and where."
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpeg;base64,{image_base64}"
+                        }
+                    }
+                ]
+            }
+        ],
+        max_tokens=400
+    )
+    
+    return response.choices[0].message.content
 
+def generate_image_with_qwen(template, reference_image):
+    """
+    Generate an image using Flux Kontext Max via Replicate
+    Can optionally provide a reference image for style/context
+    """
 
+    prompt = generate_image_description(reference_image, template)
+        # Prepare input for Flux Kontext Max
+    input_data = {
+        "prompt": prompt,
+        "quality": "medium",
+        "background": "auto",
+        "moderation": "auto",
+        "aspect_ratio": "1:1",
+        "input_images": [reference_image],
+        "output_format": "jpeg",
+        "openai_api_key": os.getenv("OPENAI_API_KEY"),
+        "number_of_images": 1,
+        "output_compression": 90
+
+            
+    }
+        
+        # Call Flux Kontext Max
+    output = replicate.run(
+        "openai/gpt-image-1",
+        input=input_data
+    )
+    
+    # Handle the FileOutput object
+    if isinstance(output, list) and len(output) > 0:
+        # Download the first image
+        image_url = output[0]
+        response = requests.get(image_url)
+        image = Image.open(io.BytesIO(response.content))
+        return image
+    else:
+        # Single image
+        response = requests.get(output)
+        image = Image.open(io.BytesIO(response.content))
+        return image   
+       
+        
+        
+    
+try:
+    imagen = generate_image_with_qwen("discount_ad", "https://cdn.webshopapp.com/shops/14594/files/437213178/image.jpg")
+    imagen.save("generated_ad_image.jpg")
+    print("Image generated successfully and saved as 'generated_ad_image.jpg'!")
+except Exception as e:
+    print(f"Error: {e}")
 

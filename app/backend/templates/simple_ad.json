@@ -1,0 +1,117 @@
+{
+  "name": "generate_simple_ad",
+  "description": "Generate simple advertisement copy and layout for an image",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Template identifier",
+        "enum": ["simple_ad"]
+      },
+      "headline": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Main headline text for the advertisement"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "description": "X coordinate for text placement"
+              },
+              "y": {
+                "type": "integer",
+                "description": "Y coordinate for text placement"
+              }
+            },
+            "required": ["x", "y"]
+          },
+          "color": {
+            "type": "string",
+            "description": "Text color in hex format",
+            "default": "#FFFFFF"
+          },
+          "font_size": {
+            "type": "integer",
+            "description": "Font size in pixels",
+            "default": 28
+          }
+        },
+        "required": ["text", "position", "color", "font_size"]
+      },
+      "subheadline": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Supporting subheadline text"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "description": "X coordinate for text placement"
+              },
+              "y": {
+                "type": "integer",
+                "description": "Y coordinate for text placement"
+              }
+            },
+            "required": ["x", "y"]
+          },
+          "color": {
+            "type": "string",
+            "description": "Text color in hex format",
+            "default": "#CCCCCC"
+          },
+          "font_size": {
+            "type": "integer",
+            "description": "Font size in pixels",
+            "default": 18
+          }
+        },
+        "required": ["text", "position", "color", "font_size"]
+      },
+      "cta_text": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Call to action text"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "description": "X coordinate for text placement"
+              },
+              "y": {
+                "type": "integer",
+                "description": "Y coordinate for text placement"
+              }
+            },
+            "required": ["x", "y"]
+          },
+          "color": {
+            "type": "string",
+            "description": "Text color in hex format",
+            "default": "#00FF00"
+          },
+          "font_size": {
+            "type": "integer",
+            "description": "Font size in pixels",
+            "default": 20
+          }
+        },
+        "required": ["text", "position", "color", "font_size"]
+      }
+    },
+    "required": ["id", "headline", "subheadline", "cta_text"]
+  }
+}

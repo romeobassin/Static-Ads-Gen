@@ -1,0 +1,157 @@
+{
+  "name": "generate_feature_highlight",
+  "description": "Generate feature highlight advertisement copy and layout for an image",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Template identifier",
+        "enum": ["feature_highlight"]
+      },
+      "headline": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Main headline text for the advertisement"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "description": "X coordinate for text placement"
+              },
+              "y": {
+                "type": "integer",
+                "description": "Y coordinate for text placement"
+              }
+            },
+            "required": ["x", "y"]
+          },
+          "color": {
+            "type": "string",
+            "description": "Text color in hex format",
+            "default": "#FFFFFF"
+          },
+          "font_size": {
+            "type": "integer",
+            "description": "Font size in pixels",
+            "default": 26
+          }
+        },
+        "required": ["text", "position", "color", "font_size"]
+      },
+      "features": {
+        "type": "array",
+        "description": "Array of feature highlights",
+        "items": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Feature description text"
+            },
+            "position": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "description": "X coordinate for text placement"
+                },
+                "y": {
+                  "type": "integer",
+                  "description": "Y coordinate for text placement"
+                }
+              },
+              "required": ["x", "y"]
+            },
+            "color": {
+              "type": "string",
+              "description": "Text color in hex format",
+              "default": "#FFFF00"
+            },
+            "font_size": {
+              "type": "integer",
+              "description": "Font size in pixels",
+              "default": 16
+            }
+          },
+          "required": ["text", "position", "color", "font_size"]
+        },
+        "minItems": 1,
+        "maxItems": 3
+      },
+      "price": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Price information text"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "description": "X coordinate for text placement"
+              },
+              "y": {
+                "type": "integer",
+                "description": "Y coordinate for text placement"
+              }
+            },
+            "required": ["x", "y"]
+          },
+          "color": {
+            "type": "string",
+            "description": "Text color in hex format",
+            "default": "#FF0000"
+          },
+          "font_size": {
+            "type": "integer",
+            "description": "Font size in pixels",
+            "default": 24
+          }
+        },
+        "required": ["text", "position", "color", "font_size"]
+      },
+      "cta_text": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Call to action text"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "description": "X coordinate for text placement"
+              },
+              "y": {
+                "type": "integer",
+                "description": "Y coordinate for text placement"
+              }
+            },
+            "required": ["x", "y"]
+          },
+          "color": {
+            "type": "string",
+            "description": "Text color in hex format",
+            "default": "#00FF00"
+          },
+          "font_size": {
+            "type": "integer",
+            "description": "Font size in pixels",
+            "default": 20
+          }
+        },
+        "required": ["text", "position", "color", "font_size"]
+      }
+    },
+    "required": ["id", "headline", "features", "price", "cta_text"]
+  }
+}

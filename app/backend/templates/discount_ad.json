@@ -1,0 +1,151 @@
+{
+  "name": "generate_discount_ad",
+  "description": "Generate discount advertisement copy and layout for an image",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Template identifier",
+        "enum": ["discount_ad"]
+      },
+      "headline": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Main headline text for the advertisement"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "description": "X coordinate for text placement"
+              },
+              "y": {
+                "type": "integer",
+                "description": "Y coordinate for text placement"
+              }
+            },
+            "required": ["x", "y"]
+          },
+          "color": {
+            "type": "string",
+            "description": "Text color in hex format (e.g., #FFFFFF for white)",
+            "default": "#FFFFFF"
+          },
+          "font_size": {
+            "type": "integer",
+            "description": "Font size in pixels",
+            "default": 24
+          }
+        },
+        "required": ["text", "position", "color", "font_size"]
+      },
+      "discount": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Discount percentage or amount text"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "description": "X coordinate for text placement"
+              },
+              "y": {
+                "type": "integer",
+                "description": "Y coordinate for text placement"
+              }
+            },
+            "required": ["x", "y"]
+          },
+          "color": {
+            "type": "string",
+            "description": "Text color in hex format",
+            "default": "#FF0000"
+          },
+          "font_size": {
+            "type": "integer",
+            "description": "Font size in pixels",
+            "default": 32
+          }
+        },
+        "required": ["text", "position", "color", "font_size"]
+      },
+      "valid_until": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Validity period text (e.g., 'Valid until Dec 31')"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "description": "X coordinate for text placement"
+              },
+              "y": {
+                "type": "integer",
+                "description": "Y coordinate for text placement"
+              }
+            },
+            "required": ["x", "y"]
+          },
+          "color": {
+            "type": "string",
+            "description": "Text color in hex format",
+            "default": "#FFFF00"
+          },
+          "font_size": {
+            "type": "integer",
+            "description": "Font size in pixels",
+            "default": 16
+          }
+        },
+        "required": ["text", "position", "color", "font_size"]
+      },
+      "cta_text": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Call to action text (e.g., 'Shop Now', 'Get Offer')"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "description": "X coordinate for text placement"
+              },
+              "y": {
+                "type": "integer",
+                "description": "Y coordinate for text placement"
+              }
+            },
+            "required": ["x", "y"]
+          },
+          "color": {
+            "type": "string",
+            "description": "Text color in hex format",
+            "default": "#00FF00"
+          },
+          "font_size": {
+            "type": "integer",
+            "description": "Font size in pixels",
+            "default": 20
+          }
+        },
+        "required": ["text", "position", "color", "font_size"]
+      }
+    },
+    "required": ["id", "headline", "discount", "valid_until", "cta_text"]
+  }
+}

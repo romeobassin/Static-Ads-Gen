@@ -1,6 +1,6 @@
 'use client'
 
-import { Template } from '@/types'
+import { Template } from '../types'
 import { CheckCircle, Sparkles, Tag, Star } from 'lucide-react'
 
 interface TemplateSelectorProps {

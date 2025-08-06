@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { Upload, Image as ImageIcon, Sparkles, Download, Settings, Zap, Palette } from 'lucide-react'
-import ImageUpload from '@/components/ImageUpload'
-import TemplateSelector from '@/components/TemplateSelector'
-import AdPreview from '@/components/AdPreview'
-import { Template } from '@/types'
+import ImageUpload from '../components/ImageUpload'
+import TemplateSelector from '../components/TemplateSelector'
+import AdPreview from '../components/AdPreview'
+import { Template } from '../types'
 
 export default function Home() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)

@@ -1,7 +1,7 @@
 'use client'
 
 import { Download, Share2, RefreshCw, Eye, CheckCircle, Sparkles } from 'lucide-react'
-import { Template } from '@/types'
+import { Template } from '../types'
 
 interface AdPreviewProps {
   generatedAd: string | null

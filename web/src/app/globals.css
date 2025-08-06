@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-slate-200;
+  }
+  body {
+    @apply bg-white text-slate-800;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-slate-800 to-slate-700 hover:from-slate-700 hover:to-slate-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-800 font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg border border-slate-300;
+  }
+  
+  .card {
+    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-200/50 p-8 hover:shadow-2xl transition-all duration-300;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 focus:border-transparent transition-all duration-200 bg-white/90 backdrop-blur-sm;
+  }
+
+  .gradient-bg {
+    @apply bg-gradient-to-br from-slate-50 via-white to-slate-100;
+  }
+
+  .glass-effect {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent;
+  }
+
+  .header-gradient {
+    @apply bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900;
+  }
+} 

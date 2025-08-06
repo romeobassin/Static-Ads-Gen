@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: adforge-pro
+    env: node
+    plan: free
+    buildCommand: cd web && npm install && npm run build
+    startCommand: cd web && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production 

@@ -67,7 +67,7 @@ def generate_image_description(image_input, template="simple_ad"):
     
     # Single API call to analyze image and generate ad text
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
@@ -94,21 +94,19 @@ def generate_image_description(image_input, template="simple_ad"):
     
     return response.choices[0].message.content
 
-def generate_image_with_qwen(template, reference_image):
+def generate_image_with_qwen(template, reference_image,static_template):
     """
     Generate an image using Flux Kontext Max via Replicate
     Can optionally provide a reference image for style/context
     """
-
-    prompt = generate_image_description(reference_image, template)
-        # Prepare input for Flux Kontext Max
+    static_ad = static_template
     input_data = {
-        "prompt": prompt,
-        "quality": "medium",
+        "prompt": "Combine this two pics into a static ad, use the second image as a template, and use the first image as a product image",
+        "quality": "auto",
         "background": "auto",
         "moderation": "auto",
         "aspect_ratio": "1:1",
-        "input_images": [reference_image],
+        "input_images": [reference_image,static_ad],
         "output_format": "jpeg",
         "openai_api_key": os.getenv("OPENAI_API_KEY"),
         "number_of_images": 1,
@@ -118,31 +116,34 @@ def generate_image_with_qwen(template, reference_image):
     }
         
         # Call Flux Kontext Max
+    print("🔄 Calling Replicate API...")
     output = replicate.run(
         "openai/gpt-image-1",
         input=input_data
     )
     
+    print(f"📦 Output type: {type(output)}")
+    print(f"📦 Output content: {output}")
+    
     # Handle the FileOutput object
     if isinstance(output, list) and len(output) > 0:
         # Download the first image
         image_url = output[0]
+        print(f"🖼️ Downloading from URL: {image_url}")
         response = requests.get(image_url)
         image = Image.open(io.BytesIO(response.content))
+        print(f"✅ Image downloaded successfully: {image.size}")
         return image
     else:
         # Single image
+        print(f"🖼️ Downloading from URL: {output}")
         response = requests.get(output)
         image = Image.open(io.BytesIO(response.content))
+        print(f"✅ Image downloaded successfully: {image.size}")
         return image   
        
         
         
     
-try:
-    imagen = generate_image_with_qwen("discount_ad", "https://cdn.webshopapp.com/shops/14594/files/437213178/image.jpg")
-    imagen.save("generated_ad_image.jpg")
-    print("Image generated successfully and saved as 'generated_ad_image.jpg'!")
-except Exception as e:
-    print(f"Error: {e}")
+
 

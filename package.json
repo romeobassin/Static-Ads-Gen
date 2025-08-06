@@ -1,0 +1,14 @@
+{
+  "name": "static-ads-generator",
+  "version": "1.0.0",
+  "description": "AdForge Pro - Professional Static Ad Generator",
+  "private": true,
+  "scripts": {
+    "build": "cd web && npm install && npm run build",
+    "start": "cd web && npm start",
+    "dev": "cd web && npm run dev"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 

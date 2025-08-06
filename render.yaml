@@ -3,8 +3,17 @@ services:
     name: adforge-pro
     env: node
     plan: free
-    buildCommand: cd web && npm install && npm run build
-    startCommand: cd web && npm start
+    region: oregon
+    buildCommand: |
+      echo "Building Node.js application..."
+      cd web
+      npm install
+      npm run build
+    startCommand: |
+      echo "Starting Node.js application..."
+      cd web
+      npm start
     envVars:
       - key: NODE_ENV
-        value: production 
+        value: production
+    autoDeploy: true 

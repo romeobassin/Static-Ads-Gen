@@ -8,6 +8,7 @@ from openai import OpenAI
 from load_template import load_template
 import base64
 
+
 load_dotenv()
 
 # Set the API token - this is the easiest way to authorize
@@ -20,6 +21,12 @@ if not os.getenv("REPLICATE_API_TOKEN"):
 
 if not os.getenv("OPENAI_API_KEY"):
     raise ValueError("OPENAI_API_KEY environment variable is not set")
+
+def read_txt_file_basic(file_path):
+    """Read entire file content as a string"""
+    with open(file_path, 'r', encoding='utf-8') as file:
+        content = file.read()
+    return content
 
 def generate_image_description(image_input, template="simple_ad"):
     """
@@ -99,14 +106,15 @@ def generate_image_with_qwen(template, reference_image,static_template):
     Generate an image using Flux Kontext Max via Replicate
     Can optionally provide a reference image for style/context
     """
+    prompt = read_txt_file_basic("prompt.txt")
     static_ad = static_template
     input_data = {
-        "prompt": "Combine this two pics into a static ad, use the second image as a template, and use the first image as a product image",
+        "prompt": prompt,
         "quality": "auto",
         "background": "auto",
         "moderation": "auto",
         "aspect_ratio": "1:1",
-        "input_images": [reference_image,static_ad],
+        "input_images": [reference_image,static_template],
         "output_format": "jpeg",
         "openai_api_key": os.getenv("OPENAI_API_KEY"),
         "number_of_images": 1,
@@ -143,7 +151,7 @@ def generate_image_with_qwen(template, reference_image,static_template):
         return image   
        
         
-        
+generate_image_with_qwen("simple_ad","https://www.thecrockltd.co.uk/cdn/shop/files/10A07213.jpg?v=1713792971",r"imgs/brownie.png")
     
 
 

@@ -1,0 +1,87 @@
+You will receive two images:
+
+Static Ad Template: A pre-designed advertisement layout with placeholders, text areas, and design elements
+Product Image: A photograph or render of a specific product that needs to be integrated
+
+Your goal is to provide comprehensive instructions on how to seamlessly combine these images to create a professional product advertisement.
+Analysis Framework
+Step 1: Template Analysis
+Analyze the static ad template and identify:
+
+Layout structure and dimensions
+Placeholder areas for product placement
+Color scheme and brand elements
+Typography and text hierarchy
+Design style (modern, vintage, minimalist, etc.)
+Available space for product integration
+Background elements and patterns
+
+Step 2: Product Image Analysis
+Examine the product image and note:
+
+Product type and key features
+Current lighting and shadows
+Background (transparent, solid, complex)
+Image quality and resolution
+Product orientation and angle
+Color palette of the product
+Size and proportions
+
+Step 3: Integration Strategy
+Provide detailed instructions for combining the images:
+Placement Instructions
+
+Specify exact positioning within the template
+Recommend scaling/resizing requirements
+Identify optimal product orientation
+Suggest cropping if needed
+
+Visual Harmony
+
+Color matching recommendations
+Lighting adjustments needed
+Shadow/reflection additions
+Background removal or blending instructions
+
+Technical Specifications
+
+Layer blending modes to use
+Opacity adjustments
+Masking requirements
+Filter or effect applications
+
+Output Format
+Provide your response in the following structure:
+TEMPLATE ASSESSMENT:
+[Describe the template's key characteristics]
+PRODUCT ASSESSMENT:
+[Analyze the product image details]
+INTEGRATION PLAN:
+
+Placement: [Where and how to position the product]
+Scaling: [Size adjustments needed]
+Color Correction: [Any color matching required]
+Lighting: [Shadow/highlight adjustments]
+Background: [How to handle product background]
+Final Touches: [Additional refinements]
+
+STEP-BY-STEP INSTRUCTIONS:
+[Numbered list of specific actions to take]
+EXPECTED RESULT:
+[Brief description of the final advertisement outcome]
+Quality Standards
+Ensure the final result:
+
+Maintains brand consistency
+Looks professionally designed
+Has proper visual hierarchy
+Creates strong product focus
+Appears realistic and natural
+Meets commercial advertising standards
+
+Additional Notes
+
+Consider the target audience and market positioning
+Ensure the product is the hero of the advertisement
+Maintain readability of any existing text
+Preserve the template's original design intent while showcasing the product effectively
